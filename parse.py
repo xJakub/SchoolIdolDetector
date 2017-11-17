@@ -277,8 +277,12 @@ def search_row(im, rarity_patterns, card_patterns):
 
     for group_min_x, group_max_x in col_positions:
         im4 = im[:, group_min_x:group_max_x]
+        found_match = False
 
         for pattern_group, pattern, pattern_idolized in rarity_patterns:
+            if found_match:
+                break
+
             im3 = im4[0:rarity_top + rarity_height + 2, 0:rarity_left + rarity_width + 2]
             res = cv2.matchTemplate(im3, pattern, cv2.TM_CCOEFF_NORMED)
 
@@ -305,6 +309,8 @@ def search_row(im, rarity_patterns, card_patterns):
                         'relative_x': relative_x,
                         'relative_y': relative_y,
                     })
+                    found_match = True
+                    break
     return found_cards
 
 
